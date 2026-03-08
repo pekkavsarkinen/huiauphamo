@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>HUIAU PHASMOTTELUA - FINAL</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #020202; color: #fff; margin: 0; padding: 10px; line-height: 1.2; font-size: 11px; }
+        .header { text-align: center; color: #ff0000; font-weight: bold; font-size: 1.6rem; text-transform: uppercase; padding-bottom: 2px; }
+        .mimic-warn { text-align: center; color: #ff00ff; font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; display: block; text-shadow: 0 0 10px #ff00ff; }
+        .mimic-warn span { display: inline-block; animation: wave 1.5s infinite ease-in-out; }
+        @keyframes wave { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .grid-main { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        .card { background: #111; padding: 8px; border-radius: 6px; border: 1px solid #333; text-align: center; }
+        .bpm-value { font-size: 1.8rem; color: #2ecc71; font-family: 'Courier New', monospace; font-weight: bold; }
+        .bpm-btn { background: #ffaa00; border: none; color: #000; padding: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; text-transform: uppercase; }
+        h2 { font-size: 0.7rem; color: #aaa; text-transform: uppercase; margin: 10px 0 5px; border-left: 3px solid #ffaa00; padding-left: 8px; }
+        .btn-row { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 8px; }
+        button { background: #1a1a1a; border: 1px solid #333; color: #999; padding: 5px 8px; cursor: pointer; border-radius: 3px; font-size: 0.65rem; transition: 0.1s; }
+        button.active { background: #ffaa00; color: #000; font-weight: bold; }
+        button.los-btn { background: #2c3e50; color: #ecf0f1; border-color: #34495e; }
+        button.los-active { background: #3498db; color: #fff; border-color: #fff; }
+        button.elim-btn { background: #331111; color: #ff8888; border-color: #442222; }
+        button.elim-active { background: #ff4444; color: #fff; border-color: #fff; }
+        .impossible { opacity: 0.05; filter: grayscale(100%); pointer-events: none; }
+        .info-btn { width: 35px; height: 30px; background: #3498db; border-radius: 4px; text-align: center; line-height: 30px; cursor: pointer; font-weight: bold; color: white; border: none; }
+        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0a0a; padding: 20px; border: 2px solid #ffaa00; z-index: 100; width: 92%; max-width: 600px; border-radius: 10px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 50px #000; }
+        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99; }
+        .m-header { color: #ff4444; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; display: block; margin-top: 15px; border-bottom: 1px solid #333; }
+        .m-body { color: #eee; font-size: 0.85rem; background: #151515; padding: 12px; border-radius: 4px; margin-top: 5px; white-space: pre-wrap; line-height: 1.5; }
+        .audio-lab { background: #1a1122; padding: 10px; border: 1px solid #9b59b6; border-radius: 6px; margin-top: 10px; }
+        .audio-test-btn { background: #9b59b6; color: white; width: 100%; padding: 8px; margin-bottom: 5px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        td { padding: 10px; border-bottom: 1px solid #1a1a1a; }
+        .egg-link { display: block; text-align: center; margin-top: 25px; color: #ff00ff; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s; text-shadow: 0 0 5px rgba(255, 0, 255, 0.5); }
+    </style>
+</head>
+<body>
+
+    <div class="header">HUIAU PHASMOTTELUA</div>
+    <div class="mimic-warn" id="mimic-text"></div>
+
+    <div class="grid-main">
+        <div class="card">
+            <div style="font-size: 0.6rem; color: #888;">BPM TAP (SPACE)</div>
+            <div class="bpm-value" id="bpm-val">0</div>
+            <button class="bpm-btn" onmousedown="tapBpm()">TAP</button>
+        </div>
+        <div class="card">
+            <button onclick="stopAudio(); resetAll();" style="background:#ff4444; color:white; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer; width:100%; margin-bottom:5px;">NOLLAA KAIKKI</button>
+            <div style="display:flex; gap:3px;">
+                <button style="flex:1" id="male-btn" onclick="setGender('M')">ÄIJJÄ</button>
+                <button style="flex:1" id="female-btn" onclick="setGender('F')">MUIJJJA</button>
+            </div>
+        </div>
+    </div>
+
+    <h2>1. Todisteet</h2>
+    <div class="btn-row">
+        <button onclick="toggleEv('EMF 5', this)">EMF 5</button>
+        <button onclick="toggleEv('Spirit Box', this)">Box</button>
+        <button onclick="toggleEv('Ultraviolet', this)">UV</button>
+        <button onclick="toggleEv('Ghost Orb', this)">Orb</button>
+        <button onclick="toggleEv('Ghost Writing', this)">Writing</button>
+        <button onclick="toggleEv('Freezing', this)">Freezing</button>
+        <button onclick="toggleEv('D.O.T.S', this)">D.O.T.S</button>
+    </div>
+
+    <h2>2. Erikoistestit / Filtterit</h2>
+    <div class="btn-row">
+        <button class="los-btn" id="los-toggle" onclick="toggleLos(this)">NÄKÖYHTEYS KIIHTYVYYS (LOS)</button>
+        <button class="elim-btn" onclick="toggleElim('mist_ball', this)">MIST BALL (Ei Oni)</button>
+        <button class="elim-btn" onclick="toggleElim('salt_step', this)">SUOLA (Ei Wraith)</button>
+        <button class="elim-btn" onclick="toggleElim('breaker_off', this)">BREAKER (Ei Jinn)</button>
+        <button class="elim-btn" onclick="toggleElim('light_on', this)">VALO (Ei Mare)</button>
+        <button class="elim-btn" onclick="toggleElim('dots_naked', this)">DOTS PALJAALLA (Ei Goryo)</button>
+    </div>
+
+    <table id="ghost-list">
+        <tbody id="ghost-table"></tbody>
+    </table>
+
+    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="egg-link">Phasmon eastereggs ja muuta nippeli tietoa</a>
+
+    <div id="overlay" onclick="closeModal()"></div>
+    <div id="modal">
+        <div id="modal-content"></div>
+        <button onclick="stopAudio(); closeModal();" style="margin-top:20px; width:100%; padding:15px; background:#333; color:white; border:none; font-weight:bold; border-radius:5px;">SULJE</button>
+    </div>
+
+<script>
+    const mimicText = "Se on Mimic. Aina.....";
+    const mimicContainer = document.getElementById('mimic-text');
+    mimicText.split('').forEach((char, i) => {
+        const span = document.createElement('span');
+        span.innerText = char === ' ' ? '\u00A0' : char;
+        span.style.animationDelay = (i * 0.1) + 's';
+        mimicContainer.appendChild(span);
+    });
+
+    const ghosts = [
+        { n: "Banshee", ev: ["Ultraviolet", "Ghost Orb", "D.O.T.S"], h: "50%*", g: "F", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- AINA vain yksi kohde (Target).\n- Metsästysraja: 50 % (keskiarvo), mutta kohteelle se voi olla jopa 80 %.\n- Huntissa välittää vain kohteestaan. Voi kävellä muiden läpi tappamatta.\n- Erikoiskyky: Uniikki 'huuto' Parabolic Microphoniin.\n- Mielenterveys: Singing-event vie kohteelta 15 % mielenterveyttä.\n- Crucifix toimii 5 metrin säteellä." },
+        { n: "Dayan", ev: ["Ghost Orb", "Ghost Writing", "D.O.T.S"], h: "50%", g: "F", los: false, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Muinaissuomalainen taruolento, pimeyden henki.\n- Erikoiskyky (Pimeys): Passiivisempi valossa, pimeässä aktiivisuus +25 %.\n- Metsästys: Liikkuu 1.7 m/s, kiihtyy pimeässä nopeammin.\n- Tunnistaminen: Sammuttaa valoja ja sähkölaitteita jatkuvasti." },
+        { n: "Demon", ev: ["Ultraviolet", "Ghost Writing", "Freezing"], h: "70%+", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Pelin aggressiivisin haamu. Hyökkää heti.\n- Metsästysraja: 70 %, mutta voi hyökätä 100 % mielenterveydellä.\n- Suitsuke: Estää metsästyksen vain 60 sekuntia.\n- Risti: Toimii 5 metrin säteellä.\n- Cooldown: Uusi metsästys jo 20s edellisen jälkeen." },
+        { n: "Deogen", ev: ["Spirit Box", "Ghost Writing", "D.O.T.S"], h: "40%", g: "ALL", los: false, audio: [{label: "Kaukana (3.0)", speed: 3.0}, {label: "Lähellä (0.4)", speed: 0.4}], det: "INFO:\n- Haamu jolta et voi piiloutua.\n- Sijainti: Tietää aina missä olet. Piiloutuminen on kuolema.\n- Nopeus: Kaukana 3.0 m/s, lähellä 0.4 m/s.\n- Spirit Box: Uniikki raskas hengitys -vastaus." },
+        { n: "Gallu", ev: ["EMF 5", "Ghost Writing", "Freezing"], h: "50%", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Alamaailman demoni. Fyysinen ja voimakas.\n- Ei usvapalloja: Ilmestyy lähes aina fyysisesti.\n- Karjunta: Peittää askeleet huudollaan metsästyksen alussa.\n- Askeleet: Kuuluvat raskaampina ja kauemmas." },
+        { n: "Goryo", ev: ["EMF 5", "Ultraviolet", "D.O.T.S"], h: "50%", g: "ALL", los: true, tags: ["not_dots_naked"], audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Ujo haamu, joka näkyy vain linssin läpi.\n- Erikoiskyky (D.O.T.S): Näkyy vain kameralla, kun kukaan ei ole huoneessa.\n- Vaeltaminen: Ei poistu kotoaan lähes koskaan." },
+        { n: "Hantu", ev: ["Ultraviolet", "Ghost Orb", "Freezing"], h: "50%", g: "ALL", los: false, tags: ["not_breaker_on"], audio: [{label: "Kylmä (2.7)", speed: 2.7}, {label: "Lämmin (1.4)", speed: 1.4}], det: "INFO:\n- Kylmyydestä voimaa saava haamu.\n- Metsästysnopeus: Kylmässä 2.7 m/s, lämpimässä 1.4 m/s.\n- Hengitys: Suusta tulee huurretta metsästyksessä ilman sähköjä.\n- Sähköt: Rakastaa sammuttaa sähköt viilentääkseen talon." },
+        { n: "Jinn", ev: ["EMF 5", "Ultraviolet", "Freezing"], h: "50%", g: "ALL", los: true, tags: ["not_breaker_off"], audio: [{label: "Syöksy (2.5)", speed: 2.5}, {label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Sähköstä kiihtyvä territoriaalinen henki.\n- Erikoiskyky (Nopeus): Sähköt päällä 2.5 m/s jos näkee uhrin kaukaa.\n- Mielenterveys: Voi viedä 25 % kaikilta sähkökaapin kautta (EMF 2).\n- Sähköt: Ei koskaan sammuta pääkatkaisijaa." },
+        { n: "Mare", ev: ["Spirit Box", "Ghost Orb", "Ghost Writing"], h: "40/60%", g: "ALL", los: true, tags: ["not_light_on"], audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Pimeyden hallitsija. Valokammoinen.\n- Metsästysraja: 60 % pimeässä / 40 % valossa.\n- Valot: Sammuttaa valot heti kun sytytät ne.\n- Erikoiskyky: Ei voi sytyttää valoja koskaan." },
+        { n: "Moroi", ev: ["Spirit Box", "Ghost Writing", "Freezing"], h: "50%", g: "ALL", los: true, audio: [{label: "Sanity 0% (2.25)", speed: 2.25}, {label: "Sanity 50% (1.5)", speed: 1.5}], det: "INFO:\n- Kiroaa uhrinsa Spirit Boxin kautta.\n- Kirous: Spirit Box -vastaus tuplaa mielenterveyden laskun.\n- Metsästysnopeus: Kiihtyy sitä mukaa kun pelaajien sanity laskee.\n- Suitsuke: Sokeutuu 12 sekunniksi metsästyksessä." },
+        { n: "Myling", ev: ["EMF 5", "Ultraviolet", "Ghost Writing"], h: "50%", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Hiljainen metsästäjä. Kuulet sen vasta kun on myöhäistä.\n- Metsästys: Askeleet kuuluvat vasta <10 metrin päästä.\n- Mikrofoni: Poikkeuksellisen paljon ääniä Parabolic Microphoniin." },
+        { n: "Obake", ev: ["EMF 5", "Ultraviolet", "Ghost Orb"], h: "50%", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Muodonmuuttaja. Jättää epänormaaleja jälkiä.\n- Sormenjäljet: Voi jättää 6 sormea. Poistaa jäljet nopeasti.\n- Metsästys: Voi muuttaa muotoaan välkkyessään." },
+        { n: "Obambo", ev: ["EMF 5", "Spirit Box", "Ghost Orb"], h: "50%", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Fyysinen voimapesä. Heittelee kaikkea.\n- Esineet: Heittää tavaroita kovaa ja kauas.\n- Polter-pommi: Heittää useita esineitä kerralla passiivisessa tilassa.\n- Askeleet: Kuuluvat raskaampina ja kauemmas." },
+        { n: "Oni", ev: ["EMF 5", "Freezing", "D.O.T.S"], h: "50%", g: "ALL", los: true, tags: ["not_mist_ball"], audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Aktiivinen ja näkyvä haamu.\n- Näkyvyys: Vilkkuu vähemmän, on lähes koko ajan näkyvissä.\n- Mielenterveys: Ghost event vie 20 % mielenterveyttä.\n- Ei usvapalloja: Aina fyysinen ilmestyminen." },
+        { n: "Onryo", ev: ["Spirit Box", "Ghost Orb", "Freezing"], h: "60%+", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Kostonhimoinen henki. Pelkää tulta.\n- Metsästysraja: 60 %. Tuli toimii kuin risti 4m säteellä.\n- Vaara: Joka 3. sammutettu tuli voi laukaista metsästyksen." },
+        { n: "Phantom", ev: ["Spirit Box", "Ultraviolet", "D.O.T.S"], h: "50%", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Mielen hämärtäjä. Katoaa salamavalon alla.\n- Mielenterveys: Katsominen vie 0,5 % sanitya per sekunti.\n- Valokuva: Katoaa kuvasta heti. Kuva on tyhjä mutta 'Ghost Photo'." },
+        { n: "Poltergeist", ev: ["Spirit Box", "Ultraviolet", "Ghost Writing"], h: "50%", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Esineiden hallitsija. Heittää kaiken päin.\n- Polter-pommi: Heittää monta esineitä, -2 % sanity per esine.\n- Metsästys: Heittää esineen 0,5 sekunnin välein 100 % varmuudella." },
+        { n: "Raiju", ev: ["EMF 5", "Ghost Orb", "D.O.T.S"], h: "65%", g: "ALL", los: true, audio: [{label: "Sähkö (2.5)", speed: 2.5}, {label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Sähköpedon kiihtyvyys.\n- Sähköt: Laitteiden lähellä nopeus 2.5 m/s.\n- Metsästysraja: 65 % jos elektroniikkaa on lähellä." },
+        { n: "Revenant", ev: ["Ghost Orb", "Ghost Writing", "Freezing"], h: "50%", g: "ALL", los: false, audio: [{label: "Näkee (3.0)", speed: 3.0}, {label: "Hidas (1.1)", speed: 1.1}], det: "INFO:\n- Pelin vaarallisin haamu avoimella.\n- Nopeus: 3.0 m/s jos tietää sijaintisi, 1.1 m/s jos ei tiedä.\n- Strategia: Ole hiljaa ja pysy piilossa." },
+        { n: "Shade", ev: ["EMF 5", "Ghost Writing", "Freezing"], h: "35%", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Arka haamu. Pelkää ihmisiä.\n- Metsästysraja: 35 %. Ei metsästä jos pelaaja on samassa huoneessa.\n- Aktiivisuus: Erittäin hiljainen korkealla mielenterveydellä." },
+        { n: "Spirit", ev: ["EMF 5", "Spirit Box", "Ghost Writing"], h: "50%", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Perushaamu. Ei erikoiskykyjä, paitsi herkkyys suitsukkeelle.\n- Suitsuke: Estää metsästyksen 180 sekunnin ajan (muilla 90s)." },
+        { n: "Thaye", ev: ["Ghost Orb", "Ghost Writing", "D.O.T.S"], h: "75%", g: "ALL", los: false, audio: [{label: "Nuori (2.75)", speed: 2.75}, {label: "Vanhus (1.0)", speed: 1.0}], det: "INFO:\n- Ikääntyvä haamu. Heikkenee ajan myötä.\n- Nuorena: Raja 75 %, nopeus 2.75 m/s.\n- Vanhana: Raja 15 %, nopeus 1.0 m/s.\n- Ikääntyminen: Tapahtuu kun pelaaja on samassa huoneessa." },
+        { n: "The Mimic", ev: ["Spirit Box", "Ultraviolet", "Freezing"], h: "Var.", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Kopioija. Se on aina tämä.\n- Erikoiskyky: Kopioi minkä tahansa haamon kyvyt.\n- Vale-orbit: Näyttää AINA haamupalloja neljäntenä todisteena." },
+        { n: "The Twins", ev: ["EMF 5", "Spirit Box", "Freezing"], h: "50%", g: "ALL", los: true, audio: [{label: "Hidas (1.5)", speed: 1.5}, {label: "Nopea (1.9)", speed: 1.9}], det: "INFO:\n- Kaksi haamua, yksi mieli.\n- Kaksoset: Voivat interaktoida kahdessa paikassa lähes samaan aikaan.\n- Nopeus: Päähaamu hidas (1.5 m/s), kopio nopea (1.9 m/s)." },
+        { n: "Wraith", ev: ["EMF 5", "Spirit Box", "D.O.T.S"], h: "50%", g: "ALL", los: true, tags: ["not_salt_step"], audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Leijuva haamu. Seinät eivät ole este.\n- Suola: Ei astu suolaan koskaan.\n- Teleportti: Voi teleportata pelaajan viereen (EMF 2/5)." },
+        { n: "Yokai", ev: ["Spirit Box", "Ghost Orb", "D.O.T.S"], h: "50/80%", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Äänelle vihainen. Huonokuuloinen.\n- Metsästysraja: 80 % jos puhut. Muuten 50 %.\n- Kuulo: Kuulee vain 2.5 metrin päähän metsästyksessä." },
+        { n: "Yurei", ev: ["Ghost Orb", "Freezing", "D.O.T.S"], h: "50%", g: "ALL", los: true, audio: [{label: "Vakio (1.7)", speed: 1.7}], det: "INFO:\n- Mielenterveyden murentaja.\n- Ovi-kyky: Sulkee ulko-oven ilman eventtiä (vie 15 % sanitya).\n- Suitsuke: Pakottaa pysymään huoneessa 90s." }
+    ];
+
+    let activeEv = []; let activeElim = []; let currentGender = null; let losActive = false; let audioCtx = null; let stepTimer = null;
+
+    function renderTable() {
+        const tbody = document.getElementById('ghost-table');
+        tbody.innerHTML = '';
+        ghosts.sort((a,b) => a.n.localeCompare(b.n)).forEach(g => {
+            let evMatch = activeEv.every(e => g.ev.includes(e));
+            let genderMatch = !currentGender || (currentGender === 'M' && g.g !== 'F') || (currentGender === 'F' && g.g !== 'M');
+            let elimMatch = activeElim.every(e => !g.tags?.includes('not_' + e));
+            let losMatch = !losActive || (losActive && g.los);
+            const tr = document.createElement('tr');
+            if (!evMatch || !genderMatch || !elimMatch || !losMatch) tr.className = 'impossible';
+            tr.innerHTML = `<td style="width:50px"><button class="info-btn" onclick="openModal('${g.n}')">i</button></td><td><b style="font-size:1.1rem">${g.n}</b><br><small style="color:#888">${g.ev.join(', ')}</small></td><td style="text-align:right"><span style="color:#ff4444; font-weight:bold">${g.h}</span></td>`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function toggleLos(el) { losActive = !losActive; el.classList.toggle('los-active'); renderTable(); }
+    function toggleEv(ev, el) { if(activeEv.includes(ev)) activeEv = activeEv.filter(x => x !== ev); else if(activeEv.length < 3) activeEv.push(ev); el.classList.toggle('active'); renderTable(); }
+    function toggleElim(type, el) { if (activeElim.includes(type)) activeElim = activeElim.filter(x => x !== type); else activeElim.push(type); el.classList.toggle('elim-active'); renderTable(); }
+    function setGender(g) { currentGender = (currentGender === g) ? null : g; document.getElementById('male-btn').classList.toggle('active', currentGender === 'M'); document.getElementById('female-btn').classList.toggle('active', currentGender === 'F'); renderTable(); }
+    
+    function openModal(name) {
+        const g = ghosts.find(x => x.n === name);
+        let audioBtns = g.audio.map(a => `<button class="audio-test-btn" onclick="playStep(${a.speed})">🔊 KUUNTELE: ${a.label}</button>`).join('');
+        document.getElementById('modal-content').innerHTML = `
+            <div style="font-size:1.8rem; color:#ffaa00; font-weight:bold; border-bottom:2px solid #ff4444">${g.n.toUpperCase()}</div>
+            <span class="m-header">Info</span>
+            <div class="m-body">${g.det}</div>
+            <div class="audio-lab">
+                <div style="color:#9b59b6; font-weight:bold; margin-bottom:5px; font-size:0.8rem">AUDIO SIMULAATTORI</div>
+                ${audioBtns}
+                <button onclick="stopAudio()" style="background:#555; color:white; width:100%; border:none; padding:5px; margin-top:5px; border-radius:4px;">STOP AUDIO</button>
+            </div>`;
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('modal').style.display = 'block';
+    }
+
+    function playStep(speed) {
+        stopAudio();
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function tick() {
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(130, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            let interval = (0.85 / speed) * 1000;
+            stepTimer = setTimeout(tick, interval);
+        }
+        tick();
+    }
+
+    function stopAudio() { clearTimeout(stepTimer); }
+    function closeModal() { document.getElementById('overlay').style.display = 'none'; document.getElementById('modal').style.display = 'none'; stopAudio(); }
+    function resetAll() { activeEv = []; activeElim = []; currentGender = null; losActive = false; document.querySelectorAll('button').forEach(b => b.classList.remove('active', 'elim-active', 'los-active')); renderTable(); }
+    function tapBpm() { let now = Date.now(); tapTimes.push(now); if (tapTimes.length > 5) tapTimes.shift(); if (tapTimes.length > 1) { let avg = (tapTimes[tapTimes.length-1] - tapTimes[0]) / (tapTimes.length - 1); document.getElementById('bpm-val').innerText = (60000 / avg).toFixed(1); } }
+    let tapTimes = [];
+    window.addEventListener('keydown', (e) => { if(e.code === 'Space') { e.preventDefault(); tapBpm(); } });
+    renderTable();
+</script>
+</body>
+</html>
