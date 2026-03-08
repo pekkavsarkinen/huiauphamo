@@ -78,6 +78,15 @@
         <button class="elim-btn" onclick="toggleElim('dots_naked', this)">DOTS PALJAALLA (Ei Goryo)</button>
     </div>
 
+    <h2>3. Pelin nopeuskerroin</h2>
+    <div class="btn-row">
+        <button class="speed-btn" onclick="setSpeed(0.5, this)">50%</button>
+        <button class="speed-btn" onclick="setSpeed(0.75, this)">75%</button>
+        <button class="speed-btn active" onclick="setSpeed(1.0, this)">100%</button>
+        <button class="speed-btn" onclick="setSpeed(1.25, this)">125%</button>
+        <button class="speed-btn" onclick="setSpeed(1.5, this)">150%</button>
+    </div>
+
     <table id="ghost-list">
         <tbody id="ghost-table"></tbody>
     </table>
@@ -110,7 +119,7 @@
         { n: "Hantu", ev: ["Ultraviolet", "Ghost Orb", "Freezing"], h: "50%", g: "ALL", los: false, tags: ["not_breaker_on"], audio: [{label: "Kylmä (2.7 m/s / 190 BPM)", speed: 2.7, bpm: 190}, {label: "Vakio (1.7 m/s / 120 BPM)", speed: 1.7, bpm: 120}, {label: "Lämmin (1.4 m/s / 100 BPM)", speed: 1.4, bpm: 100}], det: "HANTU INFO:\n\n- Nopeus riippuu huoneen lämpötilasta:\n  - 0-3°C: 2.7 m/s\n  - 15°C: 1.75 m/s\n  - Yli 15°C: 1.4 m/s\n- Ei saa lainkaan näköyhteys-kiihtyvyyttä (LOS).\n- Puhaltaa näkyvää huurua suustaan metsästyksen aikana, jos virta (breaker) on pois päältä.\n- 2x todennäköisyys sammuttaa virta (breaker).\n- Ei voi kytkeä virtaa päälle itse." },
         { n: "Jinn", ev: ["EMF 5", "Ultraviolet", "Freezing"], h: "50%", g: "ALL", los: true, tags: ["not_breaker_off"], audio: [{label: "Syöksy (2.5 m/s / 175 BPM)", speed: 2.5, bpm: 175}, {label: "Vakio (1.7 m/s / 120 BPM)", speed: 1.7, bpm: 120}], det: "JINN INFO:\n\n- Jos virta (breaker) on päällä, Jinn syöksyy kovaa (2.5 m/s) nähdessään pelaajan yli 3 metrin päässä. Lähellä se hidastaa vakionopeuteen.\n- Kyky viedä 25 % mielenterveyttä kaikilta lähellä olevilta pelaajilta (jättää samalla EMF 2/5 jäljen sähkökaapille).\n- Ei voi sammuttaa virtaa (breaker) itse.\n- Jos virta on pois päältä, Jinn on tavallinen 1.7 m/s haamu ilman erikoiskykyjä." },
         { n: "Mare", ev: ["Spirit Box", "Ghost Orb", "Ghost Writing"], h: "40/60%", g: "ALL", los: true, tags: ["not_light_on"], audio: [{label: "Vakio (1.7 m/s / 120 BPM)", speed: 1.7, bpm: 120}], det: "MARE INFO:\n\n- Metsästysraja on 60 %, jos valot ovat pois päältä kummituksen huoneessa.\n- Metsästysraja on 40 %, jos valot ovat päällä kummituksen huoneessa.\n- Voi sammuttaa valokatkaisijan välittömästi, kun pelaaja sytyttää sen.\n- Kyky sammuttaa valo mistä tahansa huoneesta, jolloin EMF-lukemaa ei tule katkaisijalle.\n- Ei voi sytyttää valoja.\n- Suosii vaeltamista pimeisiin huoneisiin." },
-        { n: "Moroi", ev: ["Spirit Box", "Ghost Writing", "Freezing"], h: "50%", g: "ALL", los: true, audio: [{label: "Min (1.5 m/s / 106 BPM)", speed: 1.5, bpm: 106}, {label: "Max (2.25 m/s / 160 BPM)", speed: 2.25, bpm: 160}], det: "MOROI INFO:\n\n- Nopeus riippuu pelaajien keskimääräisestä mielenterveydestä: mitä alempi mielenterveys, sitä nopeampi Moroi on.\n- Nopeus vaihtelee välillä 1.5 m/s (50% sanity) ja 2.25 m/s (0% sanity).\n- Saa normaalin näköyhteys-kiihtyvyyden (LOS), jolloin huippunopeus voi nousta jopa 3.71 m/s:iin.\n- Kiroaa pelaajan, joka saa vastauksen Spirit Boxilla tai kuulee haamun äänen parabolisella mikrofonilla. Kirous tuplaa passiivisen mielenterveyden kulumisen.\n- Kirous poistuu vain ottamalla mielenterveyslääkkeitä (Sanity Medication).\n- Suitsuke (Smudge Stick) sokeuttaa Moroin metsästyksen aikana 12 sekunniksi (normaali on 6s)." },
+        { n: "Moroi", ev: ["Spirit Box", "Ghost Writing", "Freezing"], h: "50%", g: "ALL", los: true, audio: [{label: "Min (1.5 m/s / 106 BPM)", speed: 1.5, bpm: 106}, {label: "Max (2.25 m/s / 160 BPM)", speed: 2.25, bpm: 160}], det: "MOROI INFO:\n\n- Nopeus riippuu pelaajien keskimääräisestä mielenterveydestä: mitä alempi mielenterveys, sitä nopeampi Moroi on.\n- Nopeus vaihtelee välillä 1.5 m/s (50% sanity) and 2.25 m/s (0% sanity).\n- Saa normaalin näköyhteys-kiihtyvyyden (LOS), jolloin huippunopeus voi nousta jopa 3.71 m/s:iin.\n- Kiroaa pelaajan, joka saa vastauksen Spirit Boxilla tai kuulee haamun äänen parabolisella mikrofonilla. Kirous tuplaa passiivisen mielenterveyden kulumisen.\n- Kirous poistuu vain ottamalla mielenterveyslääkkeitä (Sanity Medication).\n- Suitsuke (Smudge Stick) sokeuttaa Moroin metsästyksen aikana 12 sekunniksi (normaali on 6s)." },
         { n: "Myling", ev: ["EMF 5", "Ultraviolet", "Ghost Writing"], h: "50%", g: "ALL", los: true, audio: [{label: "Vakio (1.7 m/s / 120 BPM)", speed: 1.7, bpm: 120}], det: "MYLING INFO:\n\n- Myling on hiljaisempi metsästäjä: sen askeleet ja äänet kuuluvat vain hyvin läheltä (alle 12 metriä).\n- Jos kuulet askeleet, Myling on jo samassa kerroksessa ja suhteellisen lähellä.\n- Pitää enemmän ääntä parabolisessa mikrofonissa (useammin kuuluvia paranormalisia ääniä).\n- Hyvä testi: Jos taskulamppu alkaa välkkyä, mutta et kuule vielä askeleita, se on todennäköisesti Myling.\n- NOPEUS: Vakio 1.7 m/s." },
         { n: "Obambo", ev: ["Ghost Writing", "Ultraviolet", "D.O.T.S"], h: "65% / 10%", g: "ALL", los: true, audio: [{label: "Aggressive (1.96 m/s / 138 BPM)", speed: 1.96, bpm: 138}, {label: "Calm (1.45 m/s / 102 BPM)", speed: 1.45, bpm: 102}], det: "OBAMBO INFO:\n\n- Vaihtelee kahden tilan välillä noin 2 minuutin välein: 'Aggressiivinen' ja 'Rauhallinen'.\n- AGGRESSIIVINEN TILA:\n  - Metsästysraja: 65 %.\n  - Nopeus: 1.96 m/s.\n  - Metsästyksen kesto lyhenee 20 %.\n- RAUHALLINEN TILA:\n  - Metsästysraja: 10 %.\n  - Nopeus: 1.45 m/s.\n- Voi vaihtaa tilaa kesken metsästyksen, jolloin nopeus muuttuu välittömästi.\n- Ajastin alkaa n. 1 min kohdalla 'rauhallista' tilaa kun etuovi avataan." },
         { n: "Obake", ev: ["EMF 5", "Ultraviolet", "Ghost Orb"], h: "50%", g: "ALL", los: true, audio: [{label: "Vakio (1.7 m/s / 120 BPM)", speed: 1.7, bpm: 120}], det: "OBAKE INFO:\n\n- Ultraviolet: Voi jättää uniikkeja 6-sormisia jalanjälkiä tai kädenjälkiä (6.6 % mahdollisuus).\n- Kyky puolittaa olemassa olevien sormenjälkien kestoaika (normaalisti ne kestävät 2 min).\n- Metsästyksen aikana Obakella on 6.6 % mahdollisuus muuttaa ulkonäköään (shapestift) hetkeksi jokaisen välähdyksen aikana. Se palaa takaisin alkuperäiseen muotoonsa seuraavassa välähdyksessä.\n- 25 % mahdollisuus olla jättämättä sormenjälkiä lainkaan kosketuksesta.\n- NOPEUS: Vakio 1.7 m/s." },
@@ -126,16 +135,17 @@
         { n: "The Mimic", ev: ["Spirit Box", "Ultraviolet", "Freezing"], h: "Var.", g: "ALL", los: true, audio: [{label: "Vakio (1.7 m/s / 120 BPM)", speed: 1.7, bpm: 120}], det: "THE MIMIC INFO:\n\n- VALETODISTE: Mimic näyttää AINA Ghost Orbin neljäntenä todisteena (vaikka orbi ei kuulu sen virallisiin todisteisiin). Jos näet orbeja painajais-vaikeustasolla, se on lähes varmasti Mimic.\n- Jäljittelee muita kummituksia: se voi kopioida minkä tahansa muun haamun ominaisuudet (esim. Revenantin nopeuden, Demonin aggression tai Thayen ikääntymisen).\n- Vaihtaa matkittavaa haamua 30 sekunnin - 2 minuutin välein.\n- Jos se matkii esim. Moriota, se voi kirota pelaajia Boxin kautta.\n- Älä luota pelkkiin orbeihin, jos muut todisteet viittaavat Mimiciin!" },
         { n: "The Twins", ev: ["EMF 5", "Spirit Box", "Freezing"], h: "50%", g: "ALL", los: true, audio: [{label: "Pääkummitus (1.53 m/s / 108 BPM)", speed: 1.53, bpm: 108}, {label: "Sivukummitus (1.87 m/s / 132 BPM)", speed: 1.87, bpm: 132}], det: "THE TWINS INFO:\n\n- Kaksi kummitusta yhdessä: Pääkummitus (Main) pysyy huoneessa, kun taas sivukummitus (Decoy) tekee interaktioita kauempana.\n- KAKSOISINTERAKTIO: Voivat tehdä kaksi asiaa lähes samanaikaisesti eri paikoissa (näkyy usein EMF-mittarissa porrastetuna).\n- METSÄSTYS: Kumpi tahansa voi aloittaa metsästyksen, mutta ei molemmat samaan aikaan.\n- NOPEUSERO:\n  - Pääkummitus (Main) on 10 % hitaampi (1.53 m/s).\n  - Sivukummitus (Decoy) on 10 % nopeampi (1.87 m/s).\n- Jos haamu aloittaa metsästyksen kaukana suosikkihuoneesta, se on todennäköisesti nopeampi sivukummitus." },
         { n: "Wraith", ev: ["EMF 5", "Spirit Box", "D.O.T.S"], h: "50%", g: "ALL", los: true, tags: ["not_salt_step"], audio: [{label: "Vakio (1.7 m/s / 120 BPM)", speed: 1.7, bpm: 120}], det: "WRAITH INFO:\n\n- Wraith ei koskaan kosketa maata: se ei jätä jalanjälkiä suolaan (vaikka voi silti astua suolaan, jalanjälkiä ei tule UV-valossa).\n- Kyky vaeltaa välittömästi satunnaisen pelaajan luo (jättää EMF 2 -jäljen).\n- Muuttuu erittäin aktiiviseksi, jos se havaitsee suolaa.\n- Voi nähdä ovien läpi.\n- NOPEUS: Vakio 1.7 m/s." },
-        { n: "Yokai", ev: ["Spirit Box", "Ghost Orb", "D.O.T.S"], h: "50/80%", g: "ALL", los: true, audio: [{label: "Vakio (1.7 m/s / 120 BPM)", speed: 1.7, bpm: 120}], det: "YOKAI INFO:\n\n- Reagoi voimakkaasti ääneen: jos pelaajat puhuvat lähellä Yokaita, se voi aloittaa metsästyksen jopa 80 % mielenterveydellä.\n- Metsästyksen aikana Yokai on kuuro: se kuulee pelaajien puheen tai sähkölaitteet vain 2.5 metrin etäisyydeltä (normaali on 9m).\n- Lisääntynyt aktiivisuus, kun sen lähellä puhutaan.\n- NOPEUS: Vakio 1.7 m/s." },
+        { n: "Yokai", ev: ["Spirit Box", "Ghost Orb", "D.O.T.S"], h: "50/80%", g: "ALL", los: true, audio: [{label: "Vakio (1.7 m/s / 120 BPM)", speed: 1.7, bpm: 120}], det: "YOKAI INFO:\n\n- Reagoi voimakkaasti ääneen: jos pelaajat puhuvat lähellä Yokaita, se voi aloittaa metsästyksen jopa 80 % mielenterveydellä.\n- Metsästyksen aikana Yokai on kuuro: se kuulee pelaajien puheen tai sähkölaitteet vain 2.5 metrin etäisyydeltä (normaali on 10m).\n- Lisääntynyt aktiivisuus, kun sen lähellä puhutaan.\n- NOPEUS: Vakio 1.7 m/s." },
         { n: "Yurei", ev: ["Ghost Orb", "Freezing", "D.O.T.S"], h: "50%", g: "ALL", los: true, audio: [{label: "Vakio (1.7 m/s / 120 BPM)", speed: 1.7, bpm: 120}], det: "YUREI INFO:\n\n- Kyky tyhjentää mielenterveyttä nopeasti: jos se tekee erikoiskykynsä, lähellä olevat pelaajat menettävät 15 % mielenterveyttä (ilmoittaa tästä paukauttamalla oven kiinni).\n- Suitsuke (Smudge Stick) huoneessa estää Yureita liikkumasta pois huoneesta tai vaeltamasta 90 sekunnin ajan.\n- Suosii ovien ja kaappien availua/sulkemista.\n- NOPEUS: Vakio 1.7 m/s." }
     ];
 
-    let activeEv = []; let activeElim = []; let currentGender = null; let losActive = false; let audioCtx = null; let stepTimer = null; let currentBpm = 0;
+    let activeEv = []; let activeElim = []; let currentGender = null; let losActive = false; let audioCtx = null; let stepTimer = null; let currentBpm = 0; let gameSpeed = 1.0;
 
     function renderTable() {
         const tbody = document.getElementById('ghost-table');
         tbody.innerHTML = '';
-        ghosts.sort((a,b) => a.n.localeCompare(b.n)).forEach(g => {
+        
+        const processedGhosts = ghosts.map(g => {
             let evMatch = activeEv.every(e => g.ev.includes(e));
             let genderMatch = !currentGender || (currentGender === 'M' && g.g !== 'F') || (currentGender === 'F' && g.g !== 'M');
             
@@ -147,21 +157,42 @@
             if (activeElim.includes('light_on') && g.tags?.includes('not_light_on')) elimMatch = false;
             
             let losMatch = !losActive || (losActive && g.los);
+            let isPossible = evMatch && genderMatch && elimMatch && losMatch;
             
             let bpmHighlight = false;
-            if (currentBpm > 0) {
-                bpmHighlight = g.audio.some(a => Math.abs(a.bpm - currentBpm) < (a.bpm * 0.08)); 
+            if (currentBpm > 0 && isPossible) {
+                // Skaalataan tavoite-BPM pelin nopeuden mukaan (esim. 150% nopeus nostaa BPM tavoitetta 1.5x)
+                bpmHighlight = g.audio.some(a => {
+                    let targetBpm = a.bpm * gameSpeed;
+                    return Math.abs(targetBpm - currentBpm) < (targetBpm * 0.08);
+                }); 
             }
 
+            return { ...g, isPossible, bpmHighlight };
+        });
+
+        processedGhosts.sort((a, b) => {
+            if (a.isPossible !== b.isPossible) return a.isPossible ? -1 : 1;
+            return a.n.localeCompare(b.n);
+        });
+
+        processedGhosts.forEach(g => {
             const tr = document.createElement('tr');
             let classes = [];
-            if (!evMatch || !genderMatch || !elimMatch || !losMatch) classes.push('impossible');
-            if (bpmHighlight && evMatch && genderMatch && elimMatch && losMatch) classes.push('bpm-match');
+            if (!g.isPossible) classes.push('impossible');
+            if (g.bpmHighlight) classes.push('bpm-match');
             tr.className = classes.join(' ');
 
             tr.innerHTML = `<td style="width:50px"><button class="info-btn" onclick="openModal('${g.n}')">i</button></td><td><b style="font-size:1.1rem">${g.n}</b><br><small style="color:#888">${g.ev.join(', ')}</small></td><td style="text-align:right"><span style="color:#ff4444; font-weight:bold">${g.h}</span></td>`;
             tbody.appendChild(tr);
         });
+    }
+
+    function setSpeed(val, el) {
+        gameSpeed = val;
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        renderTable();
     }
 
     function toggleLos(el) { losActive = !losActive; el.classList.toggle('los-active'); renderTable(); }
@@ -177,7 +208,7 @@
             <span class="m-header">Tiedot</span>
             <div class="m-body">${g.det}</div>
             <div class="audio-lab">
-                <div style="color:#9b59b6; font-weight:bold; margin-bottom:5px; font-size:0.8rem">AUDIO SIMULAATTORI</div>
+                <div style="color:#9b59b6; font-weight:bold; margin-bottom:5px; font-size:0.8rem">AUDIO SIMULAATTORI (Käyttää ${Math.round(gameSpeed*100)}% kerrointa)</div>
                 ${audioBtns}
                 <button onclick="stopAudio()" style="background:#555; color:white; width:100%; border:none; padding:5px; margin-top:5px; border-radius:4px;">STOP AUDIO</button>
             </div>`;
@@ -188,6 +219,10 @@
     function playStep(speed) {
         stopAudio();
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Skaalataan askellustiheys pelin kertoimen mukaan
+        let adjustedSpeed = speed * gameSpeed;
+
         function tick() {
             let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
             osc.frequency.setValueAtTime(130, audioCtx.currentTime);
@@ -195,7 +230,9 @@
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
             osc.connect(gain); gain.connect(audioCtx.destination);
             osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-            let interval = (0.85 / speed) * 1000;
+            
+            // Mitä kovempi vauhti (adjustedSpeed), sitä pienempi väli (interval)
+            let interval = (0.85 / adjustedSpeed) * 1000;
             stepTimer = setTimeout(tick, interval);
         }
         tick();
@@ -203,7 +240,7 @@
 
     function stopAudio() { clearTimeout(stepTimer); }
     function closeModal() { document.getElementById('overlay').style.display = 'none'; document.getElementById('modal').style.display = 'none'; stopAudio(); }
-    function resetAll() { activeEv = []; activeElim = []; currentGender = null; losActive = false; currentBpm = 0; document.getElementById('bpm-val').innerText = '0'; document.querySelectorAll('button').forEach(b => b.classList.remove('active', 'elim-active', 'los-active')); renderTable(); }
+    function resetAll() { activeEv = []; activeElim = []; currentGender = null; losActive = false; currentBpm = 0; document.getElementById('bpm-val').innerText = '0'; document.querySelectorAll('button').forEach(b => b.classList.remove('active', 'elim-active', 'los-active')); document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active')); document.querySelector('.speed-btn[onclick*="1.0"]').classList.add('active'); gameSpeed = 1.0; renderTable(); }
     function resetBpm() { currentBpm = 0; tapTimes = []; document.getElementById('bpm-val').innerText = '0'; renderTable(); }
 
     let tapTimes = [];
